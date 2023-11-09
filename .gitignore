@@ -1,0 +1,4 @@
+.env
+setenv.py
+userids.json
+__pycache__
