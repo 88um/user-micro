@@ -1,5 +1,6 @@
 import os
-from fastapi import APIRouter, Depends, Form
+from functools import wraps
+from fastapi import APIRouter, Depends, Form, Request
 from pydantic import BaseModel
 from database.engine import get_db, Session
 from database.models import User
@@ -19,8 +20,20 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+valid_ips = ["127.0.0.1","216.82.28.90"]
+
+def auth(func):
+    @wraps(func)
+    async def wrapper(*args, request: Request, **kwargs):
+        print(request.client.host)
+        if request.client.host in valid_ips:
+            return await func(*args ,**kwargs)
+        return {'Unauthorized': True}
+    return wrapper
+
 
 @router.get("/info")
+@auth
 async def user_info(
                     username: str , 
                     db : Session = Depends(get_db)) -> User:
@@ -39,6 +52,7 @@ async def user_info(
 
 
 @router.post("/add")
+@auth
 async def user_info(
                     username: str = Form(...), 
                     user_id : str = Form(...),
