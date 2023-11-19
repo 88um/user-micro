@@ -59,7 +59,7 @@ async def user_info(
 async def user_info(
                     username: str = Form(...), 
                     user_id : str = Form(...),
-                    db : Session = Depends(get_db)) -> User:
+                    db : Session = Depends(get_db)):
     """Add user object to db
     """
     new_user = User(username=username, user_id=user_id)
