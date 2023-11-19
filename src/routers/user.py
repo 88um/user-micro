@@ -12,7 +12,10 @@ session = os.getenv('sessionid')
 proxy = os.getenv('proxy')
 c = Client(proxy=proxy)
 if session:
-    c.login_by_sessionid(session)
+    try:
+        c.login_by_sessionid(session)
+    except Exception as e:
+        print(e)
 
 router = APIRouter(
     prefix="/user",
