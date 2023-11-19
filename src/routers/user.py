@@ -39,7 +39,7 @@ def auth(func):
 @auth
 async def user_info(
                     username: str , 
-                    db : Session = Depends(get_db)) -> User:
+                    db : Session = Depends(get_db)):
     """Get user object from user id
     """
     user = db.query(User).filter(User.username == username.lower()).first()
